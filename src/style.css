@@ -1,0 +1,108 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+}
+
+.screenContainer{
+    margin: 1rem;
+    text-align: center;
+    background-color: pink;
+}
+
+.loginCard{
+    align-self: center;
+    width: 500;
+    height: 300;
+    background-color: darkslategray;
+    gap: 1rem;
+    align-items: center;
+}
+
+.loginCardButtons{
+    gap: 0.5rem;
+}
+
+.navigation{
+    background-color:darkslategray;
+    color: white;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.navigation ul{
+    padding: 1rem;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+}
+
+.navigation a{
+    color: inherit;
+    text-decoration: none;
+    align-items: center;
+    padding: 0.5rem;
+}
+
+.navigation li.active{
+    background-color: aliceblue;
+    color: darkslategray;
+}
+
+.navigation li.hover{
+    background-color: aliceblue;
+    color: darkslategray;
+}
+
+.shoppingContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 1rem;
+    background-color: rebeccapurple;
+}
+
+.shoppingList{
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background-color: red;
+    padding: 1rem;
+}
+
+.shoppingCart{
+    background-color: blue;
+    padding: 1rem;
+}
+
+.itemCard{
+    padding: 0.5rem;
+    background-color: darkslategray;
+}
+
+.itemInfoTable{
+    background-color: red;
+}
+
+.itemInfo{
+    margin: 0;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    background-color: blue;
+}
+
+.itemButtons{
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-evenly;
+}

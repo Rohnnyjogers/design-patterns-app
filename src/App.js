@@ -1,24 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import NavigationBar from './components/NavigationBar';
+import Shopping from './screens/Shopping';
+import Purchases from './screens/Purchases';
+import Logout from './screens/Logout';
+import './style.css';
+import { Route, Routes } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useState, useEffect } from 'react';
+import { auth } from './firebaseconfig';
+import Login from './screens/Login';
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [authInitialized, setAuthInitialized] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setAuthInitialized(true);
+    });
+
+    return () => unsubscribe(); // Cleanup the listener on unmount
+  }, []);
+
+  console.log(user);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {user ?
+        <>
+          <NavigationBar />
+          <div className='screenContainer'>
+            <Routes>
+              <Route path='/shopping' element={<Shopping />} />
+              <Route path='/purchases' element={<Purchases />} />
+              <Route path='/logout' element={<Logout />} />
+            </Routes>
+          </div>
+        </>
+        :
+        <Routes>
+          <Route path='/login' element={<Login/>}/>
+        </Routes>
+      }
+    </>
   );
 }
 
