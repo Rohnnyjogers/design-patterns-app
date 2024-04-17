@@ -21,3 +21,38 @@ Iterator.prototype = {
         }
     }
 }
+
+export class Item {
+    constructor(title){
+        this.itemTitle = title;
+    }
+}
+
+export class ItemBuilder{
+    constructor(title){
+        this.item = new Item(title);
+    }
+
+    setCategory(category){
+        this.item.category = category;
+    }
+
+    setManufacturer(manufacturer){
+        this.item.manufacturer = manufacturer;
+    }
+
+    setPrice(price){
+        this.item.price = price;
+    }
+
+    setQuantity(quantity){
+        this.item.quantity = quantity;
+    }
+    // setImage(image){
+    //     this.item.image = image;
+    // }
+
+    // addReview(rating, comment){
+
+    // }
+}
