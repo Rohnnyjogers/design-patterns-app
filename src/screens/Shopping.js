@@ -6,13 +6,14 @@ import { auth, database } from '../firebaseconfig';
 export default function Shopping() {
   const [items, setItems] = useState([]);
   const [cart, setCart] = useState([]);
+  const [details, setDetails] = useState({});
 
   const userId = auth.currentUser?.uid;
 
   useEffect(() => {
-    const dbRef = ref(database, '/products');
+    const productsRef = ref(database, '/products');
 
-    onValue(dbRef, (snapshot) => {
+    onValue(productsRef, (snapshot) => {
       const data = snapshot.val();
 
       if (data) {
@@ -26,7 +27,22 @@ export default function Shopping() {
         setItems([]);
       }
     })
+
+    const detailsRef = ref(database, `/details/${userId}`);
+
+    onValue(detailsRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if(data){
+        setDetails(data);
+      }
+      else{
+        setDetails({})
+      }
+    })
   }, []);
+
+  console.log(items);
 
   const addToCart = async (item, quantity) => {
     const dbRef = ref(database, `/products/${item.id}/quantity`);
@@ -51,7 +67,13 @@ export default function Shopping() {
   }
 
   const handlePurchase = async() => {
-    let validQuantities = true;
+    let validQuantities = false;
+
+    if(Object.keys(details).length === 0){
+      alert('Please fill out Details section before making a purchase');
+      setCart([]);
+      return;
+    }
 
     if(cart.length === 0){
       alert('Purchase failed: Cart is empty');
@@ -104,7 +126,7 @@ export default function Shopping() {
   return (
     <div className='shoppingContainer'>
       <div>
-        <h1>Shopping List</h1>
+        <h2>Shopping List</h2>
         <div className='shoppingList'>
           {items.map((item) => {
             return (
@@ -119,7 +141,7 @@ export default function Shopping() {
       </div>
 
       <div>
-        <h1>Shopping Cart</h1>
+        <h2>Shopping Cart</h2>
         <div className='shoppingCart'>
           <div style={{backgroundColor: 'azure'}}>
             {cart.map((cartItem) => {
@@ -130,10 +152,12 @@ export default function Shopping() {
               )
             })}
           </div>
-          <div>
-            <button onClick={handlePurchase}>Purhase</button>
-            <button onClick={() => setCart([])}>Clear Cart</button>
-          </div>
+          {Object.keys(cart).length > 0 && 
+            <div>
+              <button onClick={handlePurchase}>Purhase</button>
+              <button onClick={() => setCart([])}>Clear Cart</button>
+            </div>  
+          }
         </div>
       </div>
     </div>

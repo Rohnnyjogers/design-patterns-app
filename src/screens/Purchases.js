@@ -69,7 +69,7 @@ export default function Purchases() {
         </div>
       ) : (
         <>
-          <h3>Purchases List</h3>
+          <h2>Purchases List</h2>
           {purchases.map((purchase) => {
             return(
               <div style={{backgroundColor: 'darkslategray', padding: 10, margin: 10, color: 'white'}}>
