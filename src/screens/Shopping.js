@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ItemCard from '../components/ItemCard'
-import { get, onValue, ref, set, update } from 'firebase/database';
+import { child, get, onValue, ref, set, update } from 'firebase/database';
 import { auth, database } from '../firebaseconfig';
 
 export default function Shopping() {
@@ -74,21 +74,29 @@ export default function Shopping() {
 
     if(validQuantities){
       const purchasesRef = ref(database, `purchases/${userId}`);
+      const purchasesSnapshot = await get(purchasesRef);
+      const purchases = purchasesSnapshot.exists() ? purchasesSnapshot.val() : {};
       
       for(const cartItem of cart){
         const { id, quantity, itemTitle } = cartItem;
-        const itemRef = ref(purchasesRef, id);
-        const itemSnapshot = await get(itemRef);
+        const currentItem = purchases[id];
+        const itemRef = child(purchasesRef, id);
 
-        if(itemSnapshot.exists()){
-          await update(itemRef, {quantity: itemSnapshot.val().quantity + quantity});
-          alert(`Purchase successful: ${cart.toString()}`);
+        if(currentItem){
+          const updateQuantitiy = currentItem.quantity + quantity
+          update(itemRef, {quantity: updateQuantitiy});
         }
         else{
-          await set(itemRef, {itemTitle: itemTitle, quantity: quantity});
-          alert(`Purchase successful: ${cart.toString()}`);
+          const purchaseData = {
+            itemTitle: itemTitle,
+            quantity: quantity
+          }
+          await set(itemRef, purchaseData);
         }
       }
+
+      const cartContents = cart.map(item => `${item.itemTitle} x ${item.quantity}`).join(',');
+      alert(`Purchase successful: ${cartContents}`);
     }
     setCart([]);
   }
