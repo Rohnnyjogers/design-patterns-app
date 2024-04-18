@@ -2,6 +2,7 @@ import NavigationBar from './components/NavigationBar';
 import Shopping from './screens/Shopping';
 import Purchases from './screens/Purchases';
 import Logout from './screens/Logout';
+import Details from './screens/Details';
 import './style.css';
 import { Route, Routes } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -67,6 +68,7 @@ function App() {
           <NavigationBar />
           <div className='screenContainer'>
             <Routes>
+              <Route path='/details' element={<Details/>}/>
               <Route path='/shopping' element={<Shopping />} />
               <Route path='/purchases' element={<Purchases />} />
               <Route path='/logout' element={<Logout />} />

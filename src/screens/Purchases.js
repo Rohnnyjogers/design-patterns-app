@@ -9,6 +9,7 @@ export default function Purchases() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPurchase, setSelectedPurchase] = useState(null);
   const userId = auth.currentUser?.uid;
+  const userEmail = auth.currentUser?.email
 
   useEffect(() => {
     const dbRef = ref(database, `/purchases/${userId}`);
@@ -50,7 +51,8 @@ export default function Purchases() {
 
     const reviewData = {
       rating: rating,
-      comment: comment
+      comment: comment,
+      author: userEmail
     }
 
     const itemId = selectedPurchase.id;
