@@ -11,9 +11,11 @@ import { auth, database } from './firebaseconfig';
 import Login from './screens/Login';
 import { get, ref, set } from 'firebase/database';
 import { ItemBuilder } from './Patterns';
+import AddItem from './screens/AddItem';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [admin, setAdmin] = useState(false);
 
   const buildItems = () => {
     const titles = ['Carrots', 'Apples', 'Celery', 'Oranges', 'Broccoli'];
@@ -55,7 +57,13 @@ function App() {
 
 
   useEffect(() => {
+    const adminState = localStorage.getItem('admin');
+    if(adminState != null){
+      setAdmin(JSON.parse(adminState));
+    }
+
     checkDbForItems();
+
     onAuthStateChanged(auth, (user) => {
       setUser(user);
     });
@@ -68,10 +76,11 @@ function App() {
           <NavigationBar />
           <div className='screenContainer'>
             <Routes>
+              <Route path='/addItems' element={<AddItem/>}/>
               <Route path='/details' element={<Details/>}/>
-              <Route path='/shopping' element={<Shopping />} />
-              <Route path='/purchases' element={<Purchases />} />
-              <Route path='/logout' element={<Logout />} />
+              <Route path='/shopping' element={<Shopping/>}/>
+              <Route path='/purchases' element={<Purchases/>}/>
+              <Route path='/logout' element={<Logout/>}/>
             </Routes>
           </div>
         </>

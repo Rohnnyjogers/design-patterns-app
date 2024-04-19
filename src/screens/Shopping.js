@@ -44,10 +44,16 @@ export default function Shopping() {
   const [items, setItems] = useState([]);
   const [cart, setCart] = useState([]);
   const [details, setDetails] = useState({});
+  const [admin, setAdmin] = useState(false); 
 
   const userId = auth.currentUser?.uid;
 
   useEffect(() => {
+    const adminState = localStorage.getItem('admin');
+    if(adminState != null){
+      setAdmin(JSON.parse(adminState));
+    }
+
     const productsRef = ref(database, '/products');
 
     onValue(productsRef, (snapshot) => {
@@ -195,6 +201,10 @@ export default function Shopping() {
     setCart([]);
   }
 
+  const simulatePurchase = () => {
+    alert('Purchase simulated.');
+  }
+
   return (
     <div style={{ alignItems: 'center' }}>
       <div className='searchDiv'>
@@ -232,7 +242,11 @@ export default function Shopping() {
             </div>
             {Object.keys(cart).length > 0 &&
               <div>
-                <button onClick={handlePurchase}>Purhase</button>
+                {admin ? 
+                  <button onClick={simulatePurchase}>Simulate purchase</button>
+                :
+                  <button onClick={handlePurchase}>Purhase</button>
+                }
                 <button onClick={() => setCart([])}>Clear Cart</button>
               </div>
             }

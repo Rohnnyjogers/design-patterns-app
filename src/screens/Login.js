@@ -41,7 +41,20 @@ export default function Login () {
             console.log('Sign-in failed', error);
         }
     }
-    const adminSignIn = async () => {}
+
+    const adminSignIn = async () => {
+        try{
+            await signInWithEmailAndPassword(auth, email, password);
+            localStorage.setItem('admin', JSON.stringify(true));
+            alert('Admin Sign-in Successful!');
+            navigate('/shopping');
+            
+        }
+        catch(error){
+            alert(' Admin Sign-in failed: ', error.message);
+            console.log('Sign-in failed', error);
+        }
+    }
 
     return (
     <div className='loginCard'>
@@ -61,7 +74,7 @@ export default function Login () {
         <div className='loginCardButtons'>
             <button onClick={userSignIn}>Sign-in</button>
             <button onClick={userSignUp}>Sign-up</button>
-            <button>Admin Sign-in</button>
+            <button onClick={adminSignIn}>Admin Sign-in</button>
         </div>
     </div>
   )
