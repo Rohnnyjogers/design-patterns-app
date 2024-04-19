@@ -16,13 +16,10 @@ export default function NavigationBar() {
         <nav className="navigation">
             <ul>
                 {admin && <RouteLink to='/addItems'>Add Items</RouteLink>}
-                {admin ? 
-                    <></> 
-                    : 
-                    <RouteLink to='/details'>Details</RouteLink>
-                }
+                {!admin && <RouteLink to='/details'>Details</RouteLink>}
                 <RouteLink to='/shopping'>Shopping</RouteLink>
-                <RouteLink to='/purchases'>Purchases</RouteLink>
+                {admin && <RouteLink to='/userDetails'>User Details</RouteLink>}
+                {!admin && <RouteLink to='/purchases'>Purchases</RouteLink>}
                 <RouteLink to='/logout'>Logout</RouteLink>
             </ul>
         </nav>

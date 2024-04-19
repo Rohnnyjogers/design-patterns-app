@@ -3,6 +3,7 @@ import Shopping from './screens/Shopping';
 import Purchases from './screens/Purchases';
 import Logout from './screens/Logout';
 import Details from './screens/Details';
+import UserDetails from './screens/UserDetails';
 import './style.css';
 import { Route, Routes } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -79,6 +80,7 @@ function App() {
               <Route path='/addItems' element={<AddItem/>}/>
               <Route path='/details' element={<Details/>}/>
               <Route path='/shopping' element={<Shopping/>}/>
+              <Route path='/userDetails' element={<UserDetails/>}/>
               <Route path='/purchases' element={<Purchases/>}/>
               <Route path='/logout' element={<Logout/>}/>
             </Routes>

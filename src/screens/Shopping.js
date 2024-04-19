@@ -225,7 +225,15 @@ export default function Shopping() {
         <div>
           <h2>Shopping List</h2>
           <div className='shoppingList'>
-           <SearchResults items={items} searchParams={searchSubject.searchParams}/>
+           {/* <SearchResults items={items} searchParams={searchSubject.searchParams}/> */}
+           {items.map((item) => {
+            return(
+              <ItemCard
+                item={item}
+                onAddToCart={addToCart}
+              />
+            )
+           })}
           </div>
         </div>
         <div>
