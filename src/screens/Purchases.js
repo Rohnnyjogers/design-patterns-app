@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { auth, database } from '../firebaseconfig';
-import { onValue, push, ref, set } from 'firebase/database';
+import { onValue, push, ref } from 'firebase/database';
 
 export default function Purchases() {
   const [purchases, setPurchases] = useState([]);
