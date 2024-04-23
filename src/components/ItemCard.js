@@ -44,7 +44,7 @@ export default function ItemCard({ item, onAddToCart }) {
     const closeModal = () => {
         setModalOpen(false);
     }  
-    console.log(reviewItems);
+
     return (
         <>
             <div className='itemCard'>

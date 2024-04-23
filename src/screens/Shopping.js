@@ -145,7 +145,7 @@ export default function Shopping() {
   }
 
   const handlePurchase = async () => {
-    let validQuantities = false;
+    let validQuantities = true;
 
     if (Object.keys(details).length === 0) {
       alert('Please fill out Details section before making a purchase');
@@ -197,6 +197,9 @@ export default function Shopping() {
 
       const cartContents = cart.map(item => `${item.itemTitle} x ${item.quantity}`).join(',');
       alert(`Purchase successful: ${cartContents}`);
+    }
+    else{
+      alert('!validQunatities');
     }
     setCart([]);
   }

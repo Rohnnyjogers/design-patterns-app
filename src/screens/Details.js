@@ -2,6 +2,32 @@ import { onValue, ref, set } from 'firebase/database';
 import React, { useEffect, useState } from 'react'
 import { auth, database } from '../firebaseconfig';
 
+// class TemplateClass {
+//   templateMethod(cardNumber, expiryMonth, expiryYear, cardType, address, ) {
+//     this.validateFields(address, cardNumber, expiryMonth, expiryYear, cardType);
+//     this.validateCardNumber(cardNumber);
+//     this.validateExpiry(expiryMonth);
+//     this.validateCardType(cardNumber);
+//   }
+
+//   validateCardNumber(cardNumber) {
+//     const cardNumberStr = String(cardNumber);
+//     return !cardNumberStr.startsWith('5') || !cardNumberStr.startsWith('4');
+//   }
+
+//   validateExpiry(expiryMonth) {
+//     return expiryMonth < 3;
+//   }
+
+//   validateFields(address, cardNumber, expiryMonth, expiryYear, cardType) {
+//     return !address || !cardNumber || !expiryMonth || !expiryYear || !cardType;
+//   };
+
+//   validateCardType(cardNumber) {
+
+//   }
+// }
+
 const validateVisa = (cardNumber) => {
   const cardNumberStr = String(cardNumber);
   return cardNumberStr.startsWith('4') && cardNumberStr.length === 5;
@@ -24,6 +50,21 @@ const validateFields = (address, cardNumber, expiryMonth, expiryYear, cardType) 
   return !address || !cardNumber || !expiryMonth || !expiryYear || !cardType;
 }
 
+// class VisaTemplate extends TemplateClass {
+  
+//   validateCardType(cardNumber) {
+//     const cardNumberStr = String(cardNumber);
+//     return !cardNumberStr.startsWith('4') && cardNumberStr.length !== 5;
+//   }
+// }
+
+// class MastercardTemplate extends TemplateClass {
+//   validateCardType(cardNumber) {
+//     const cardNumberStr = String(cardNumber);
+//     return !cardNumberStr.startsWith('5') && cardNumberStr.length !== 5;
+//   }
+// }
+
 export default function Details() {
   const [address, setAddress] = useState('');
   const [cardNumber, setCardNumber] = useState(null);
@@ -40,30 +81,34 @@ export default function Details() {
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
 
-      if(data){
+      if (data) {
         setDetails(data);
       }
-      else{
+      else {
         setDetails({})
       }
     })
   }, []);
+  console.log(details);
+  const handleSubmit = async () => {
+    let isValid = false;
 
-  const handleSubmit = async() => {
-    let isValid = true;
-    
-    isValid = validateFields(address,cardNumber,expiryMonth,expiryYear,cardType);
+    isValid = validateFields(address, cardNumber, expiryMonth, expiryYear, cardType);
     isValid = validateCardNumber(cardNumber);
     isValid = validateExpiry(expiryMonth);
 
-    if(cardType === 'Visa'){
+    if (cardType === 'Visa') {
+      // const visa = new VisaTemplate();
+      // inValid = visa.templateMethod()
       isValid = validateVisa(cardNumber);
     }
-    else if(cardType === 'Mastercard'){
+    else if (cardType === 'Mastercard') {
+      // const mastercard = new MastercardTemplate();
+      // inValid = mastercard.templateMethod();
       isValid = validateMastercard(cardNumber);
     }
 
-    if(isValid){
+    if (isValid) {
       const details = {
         address: address,
         cardNumber: cardNumber,
@@ -74,8 +119,9 @@ export default function Details() {
 
       const detailsRef = ref(database, `details/${userId}`);
       await set(detailsRef, details);
+      alert('Details saved successfully');
     }
-    else{
+    else {
       alert('Details submission failed: Please check your details and try again.');
     }
   }
@@ -88,13 +134,13 @@ export default function Details() {
     setCardType('');
   }
 
-  const months = [1,2,3,4,5,6,7,8,9,10,11,12];
+  const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const years = [2024, 2025, 2026];
   const cardTypes = ['Visa', 'Mastercard'];
 
   return (
     <>
-      {Object.keys(details) > 0 ? 
+      {Object.keys(details) > 0 ?
         <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
           <h2>Your Details</h2>
           <div>
@@ -103,55 +149,55 @@ export default function Details() {
           </div>
           <div>
             <h4>Card Details</h4>
-            <p><b>Card number: </b> {details.cardNumber}</p>  
-            <p><b>Card expiry: </b> {`${details.expiryMonth}/${details.expiryYear}`}</p>  
-            <p><b>Card type: </b> {details.cardType}</p>  
-          </div>  
+            <p><b>Card number: </b> {details.cardNumber}</p>
+            <p><b>Card expiry: </b> {`${details.expiryMonth}/${details.expiryYear}`}</p>
+            <p><b>Card type: </b> {details.cardType}</p>
+          </div>
         </div>
-      :
+        :
         <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
-        <h2>Enter Details</h2>
-        <h4>Shipping Address</h4>
-        <textarea
-          placeholder='Enter full address'
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        <h4>Card Details</h4>
-        <input
-          type='number'
-          placeholder='Card Number'
-          value={cardNumber === null ? '' : cardNumber}
-          onChange={(e) => setCardNumber(e.target.value)}
-        />
-        <select value={expiryMonth === null ? '' : expiryMonth} onChange={(e) => setExpiryMonth(e.target.value)}>
-          <option value={''}>Select expiry month</option>
-          {months.map((month) => {
-            return(
-              <option key={month} value={month}>{month}</option>
-            )
-          })}
-        </select>
-        <select value={expiryYear === null ? '': expiryYear} onChange={(e) => setExpiryYear(e.target.value)}>
-          <option value={''}>Select expiry year</option>
-          {years.map((year) => {
-            return(
-              <option key={year} value={year}>{year}</option>
-            )
-          })}
-        </select>
-        <select value={cardType} onChange={(e) => setCardType(e.target.value)}>
-          <option value={''}>Card type</option>
-          {cardTypes.map((type) => {
-            return(
-              <option key={type} value={type}>{type}</option>
-            )
-          })}
-        </select>
-        <button onClick={handleSubmit}>Submit</button>
-        <button onClick={handleClear}>Clear Fields</button>
-      </div>
-    }
-  </>
+          <h2>Enter Details</h2>
+          <h4>Shipping Address</h4>
+          <textarea
+            placeholder='Enter full address'
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+          <h4>Card Details</h4>
+          <input
+            type='number'
+            placeholder='Card Number'
+            value={cardNumber === null ? '' : cardNumber}
+            onChange={(e) => setCardNumber(e.target.value)}
+          />
+          <select value={expiryMonth === null ? '' : expiryMonth} onChange={(e) => setExpiryMonth(e.target.value)}>
+            <option value={''}>Select expiry month</option>
+            {months.map((month) => {
+              return (
+                <option key={month} value={month}>{month}</option>
+              )
+            })}
+          </select>
+          <select value={expiryYear === null ? '' : expiryYear} onChange={(e) => setExpiryYear(e.target.value)}>
+            <option value={''}>Select expiry year</option>
+            {years.map((year) => {
+              return (
+                <option key={year} value={year}>{year}</option>
+              )
+            })}
+          </select>
+          <select value={cardType} onChange={(e) => setCardType(e.target.value)}>
+            <option value={''}>Card type</option>
+            {cardTypes.map((type) => {
+              return (
+                <option key={type} value={type}>{type}</option>
+              )
+            })}
+          </select>
+          <button onClick={handleSubmit}>Submit</button>
+          <button onClick={handleClear}>Clear Fields</button>
+        </div>
+      }
+    </>
   )
 }

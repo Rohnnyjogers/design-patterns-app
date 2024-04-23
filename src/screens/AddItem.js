@@ -79,7 +79,7 @@ export default function AddItem() {
                 alert(`${itemTitle}'s quantity updated by ${updateQuantity}`);
             }
             else{
-                alert(`'${itemTitle}' not found, pleasde try again`);
+                alert(`'${updateTitle}' not found, pleasde try again`);
             }
         }
         catch(error){
